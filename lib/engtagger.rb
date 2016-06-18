@@ -598,7 +598,7 @@ class EngTagger
 
   # Strip the provided text of HTML-style tags and separate off any punctuation
   # in preparation for tagging
-  def clean_text(text)
+  def clean_text(text, split_sentences: true)
     return false unless valid_text(text)
     text = text.toutf8
     unless $no_hpricot
@@ -612,8 +612,13 @@ class EngTagger
     cleaned_text.split(/\s+/).each do |line|
       tokenized += split_punct(line)
     end
-    words = split_sentences(tokenized)
-    return words
+
+    # Split sentences unless told not to
+    if split_sentences
+      tokenized = split_sentences(tokenized)
+    end
+
+    return tokenized
   end
 
   # This handles all of the trailing periods, keeping those that
